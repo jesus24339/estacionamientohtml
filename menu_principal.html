@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estacionamiento TESI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --color-primario: #2ecc71; /* Verde */
+            --color-primario-hover: #27ae60;
+            --color-secundario: #e74c3c; /* Rojo */
+            --color-secundario-hover: #c0392b;
+            --color-terciario: #ffffff; /* Blanco */
+            --color-activo: #1abc9c;
+            --color-texto: #2c3e50;
+            --color-texto-claro: #95a5a6;
+            --color-fondo: #f8f9fa;
+            --color-borde: #ecf0f1;
+            --color-error: #e74c3c;
+            --color-exito: #2ecc71;
+            --sombra: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --sombra-input: 0 5px 15px rgba(46, 204, 113, 0.1);
+            --transicion: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            background: url('imagen.jpg') center/cover no-repeat fixed;
+            color: var(--color-texto);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .contenedor-principal {
+            width: 100%;
+            max-width: 1100px;
+            min-height: 650px;
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+            backdrop-filter: blur(8px);
+            position: relative;
+            z-index: 1;
+            transition: var(--transicion);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .contenedor-principal::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- MARCO IZQUIERDO (IMAGEN) --- */
+        .marco-imagen {
+            flex: 1.5;
+            background: url('imagen2.png') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .marco-imagen::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(46, 204, 113, 0.7), rgba(231, 76, 60, 0.7));
+        }
+
+        .contenido-imagen {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+            color: white;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: inline-block;
+            background: linear-gradient(to right, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+        }
+
+        .contenido-imagen h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .contenido-imagen p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- MARCO DERECHO (FORMULARIO) --- */
+        .marco-login {
+            flex: 1;
+            padding: 60px 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+
+        .contenedor-central {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        /* --- TÍTULO --- */
+        .titulo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--color-texto);
+            position: relative;
+        }
+
+        .titulo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--color-primario), var(--color-secundario));
+            border-radius: 3px;
+        }
+
+        /* --- FORMULARIO --- */
+        .formulario-login {
+            width: 100%;
+        }
+
+        .campo-formulario {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .campo-formulario label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--color-texto);
+            transition: var(--transicion);
+        }
+
+        .campo-formulario select,
+        .campo-formulario input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 0.9rem;
+            border: 2px solid var(--color-borde);
+            border-radius: 10px;
+            background-color: var(--color-fondo);
+            transition: var(--transicion);
+            box-shadow: var(--sombra-input);
+        }
+
+        .campo-formulario select:focus,
+        .campo-formulario input:focus {
+            outline: none;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+        }
+
+        .campo-formulario select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 1em;
+        }
+
+        /* --- BOTONES --- */
+        .botones-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transicion);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: var(--transicion);
+        }
+
+        .btn:hover::after {
+            opacity: 1;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .btn-primario {
+            background: linear-gradient(45deg, var(--color-primario), #1abc9c);
+        }
+
+        .btn-primario:hover {
+            background: linear-gradient(45deg, var(--color-primario-hover), #16a085);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-secundario {
+            background: linear-gradient(45deg, var(--color-secundario), #e67e22);
+        }
+
+        .btn-secundario:hover {
+            background: linear-gradient(45deg, var(--color-secundario-hover), #d35400);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn i {
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        /* --- MENSAJES DE ERROR --- */
+        .mensaje-error {
+            color: var(--color-error);
+            font-size: 0.8rem;
+            margin-top: 8px;
+            display: none;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* --- EFECTOS ADICIONALES --- */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .contenedor-principal {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .marco-imagen {
+                padding: 40px 20px;
+                flex: none;
+                height: 250px;
+            }
+            
+            .marco-login {
+                padding: 40px 30px;
+            }
+
+            .contenido-imagen {
+                padding: 0;
+            }
+
+            .contenido-imagen h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .contenido-imagen p {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .logo {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .botones-container {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .titulo {
+                font-size: 1.5rem;
+            }
+            
+            .marco-login {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="contenedor-principal animate__animated animate__fadeIn">
+        <!-- Marco izquierdo (Imagen) -->
+        <div class="marco-imagen">
+            <div class="contenido-imagen">
+                <div class="logo floating">MOVILIDAD TESI</div>
+                <h2>SISTEMA DE CONTROL DE ESTACIONAMIENTO DEL TESI</h2>
+                <p>Solución tecnológica para la gestión eficiente de espacios de estacionamiento en el Tecnológico de Estudios Superiores de Ixtapaluca.</p>
+                <div class="badge floating">
+                    <i class="fas fa-car"></i> Control de Acceso Vehicular
+                </div>
+            </div>
+        </div>
+
+        <!-- Marco derecho (Formulario) -->
+        <div class="marco-login">
+            <div class="contenedor-central">
+                <h1 class="titulo">ACCESO AL SISTEMA</h1>
+                
+                <form class="formulario-login" id="formulario-login">
+                    <!-- Tipo de usuario -->
+                    <div class="campo-formulario">
+                        <label for="tipo-usuario"><i class="fas fa-user-tag"></i> Tipo de Usuario</label>
+                        <select id="tipo-usuario" name="tipo-usuario" required>
+                            <option value="" disabled selected>Seleccione su rol</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Guardia">Guardia</option>
+                        </select>
+                        <div class="mensaje-error" id="error-tipo-usuario">Por favor seleccione un tipo de usuario</div>
+                    </div>
+
+                    <!-- Matrícula -->
+                    <div class="campo-formulario">
+                        <label for="matricula"><i class="fas fa-id-card"></i> Matrícula</label>
+                        <input type="text" id="matricula" name="matricula" placeholder="Ingrese su matrícula" required>
+                        <div class="mensaje-error" id="error-matricula">La matrícula es requerida</div>
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div class="campo-formulario">
+                        <label for="contrasena"><i class="fas fa-lock"></i> Contraseña</label>
+                        <input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
+                        <div class="mensaje-error" id="error-contrasena">La contraseña es requerida</div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="botones-container">
+                        <button type="submit" class="btn btn-primario" id="btn-ingresar">
+                            <i class="fas fa-sign-in-alt"></i> Ingresar
+                        </button>
+                        <a href="registro_admin.html" class="btn btn-secundario" id="btn-registrar">
+                            <i class="fas fa-user-plus"></i> Registrarse
+                        </a>
+                    </div>
+
+                    <!-- Enlace olvidé contraseña -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="#" style="color: var(--color-texto-claro); font-size: 0.8rem; text-decoration: none;">
+                            <i class="fas fa-question-circle"></i> ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // --- VARIABLES GLOBALES ---
+        const COLOR_BOTON_ACTIVO = "#1abc9c";
+
+        // --- FUNCIONES ---
+        function verificarLogin(event) {
+            event.preventDefault();
+            
+            // Obtener valores del formulario
+            const matricula = document.getElementById('matricula').value;
+            const contrasena = document.getElementById('contrasena').value;
+            const tipoUsuario = document.getElementById('tipo-usuario').value;
+            
+            // Validar campos
+            let isValid = true;
+            
+            if (!tipoUsuario) {
+                document.getElementById('error-tipo-usuario').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-tipo-usuario').style.display = 'none';
+            }
+            
+            if (!matricula) {
+                document.getElementById('error-matricula').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-matricula').style.display = 'none';
+            }
+            
+            if (!contrasena) {
+                document.getElementById('error-contrasena').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('error-contrasena').style.display = 'none';
+            }
+            
+            if (!isValid) {
+                // Efecto de shake en el formulario
+                document.querySelector('.contenedor-central').classList.add('animate__animated', 'animate__shakeX');
+                setTimeout(() => {
+                    document.querySelector('.contenedor-central').classList.remove('animate__animated', 'animate__shakeX');
+                }, 1000);
+                return;
+            }
+            
+            // Animación del botón
+            const btnIngresar = document.getElementById('btn-ingresar');
+            btnIngresar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            btnIngresar.style.background = 'linear-gradient(45deg, #1abc9c, #16a085)';
+            
+            // Enviar datos al servidor
+            enviarDatosLogin(matricula, contrasena, tipoUsuario);
+        }
+        
+        function enviarDatosLogin(matricula, contrasena, tipoUsuario) {
+            // Crear objeto FormData
+            const formData = new FormData();
+            formData.append('matricula', matricula);
+            formData.append('contrasena', contrasena);
+            formData.append('tipo_usuario', tipoUsuario);
+            
+            // Enviar datos al servidor PHP
+            fetch('login.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Restaurar botón
+                const btnIngresar = document.getElementById('btn-ingresar');
+                btnIngresar.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+                btnIngresar.style.background = 'linear-gradient(45deg, var(--color-primario), #1abc9c)';
+                
+                if (data.success) {
+                    // Mostrar mensaje de éxito con animación
+                    Swal.fire({
+                        title: '¡Acceso concedido!',
+                        text: `Bienvenido ${data.nombre_usuario}`,
+                        icon: 'success',
+                        confirmButtonText: 'Continuar',
+                        background: 'white',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    }).then(() => {
+                        // Redireccionar según el tipo de usuario
+                        if (tipoUsuario === 'Administrador') {
+                            window.location.href = `pagina_base.html?usuario=${encodeURIComponent(data.nombre_usuario)}`;
+                        } else if (tipoUsuario === 'Guardia') {
+                            window.location.href = `pagina_base_guardia.html?usuario=${encodeURIComponent(data.nombre_usuario)}`;
+                        } else if (tipoUsuario === 'Docente') {
+                            window.location.href = `panel_docente.html?usuario=${encodeURIComponent(data.nombre_usuario)}`;
+                        }
+                    });
+                } else {
+                    // Mostrar mensaje de error
+                    Swal.fire({
+                        title: 'Acceso denegado',
+                        text: data.message || 'Credenciales incorrectas o usuario no registrado',
+                        icon: 'error',
+                        confirmButtonText: 'Intentar de nuevo',
+                        background: 'white',
+                        showClass: {
+                            popup: 'animate__animated animate__headShake'
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Restaurar botón
+                const btnIngresar = document.getElementById('btn-ingresar');
+                btnIngresar.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+                btnIngresar.style.background = 'linear-gradient(45deg, var(--color-primario), #1abc9c)';
+                
+                Swal.fire({
+                    title: 'Error de conexión',
+                    text: 'No se pudo conectar con el servidor',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    background: 'white',
+                    showClass: {
+                        popup: 'animate__animated animate__headShake'
+                    }
+                });
+            });
+        }
+        
+        // --- EVENT LISTENERS ---
+        document.getElementById('formulario-login').addEventListener('submit', verificarLogin);
+        
+        // Efectos hover para inputs
+        document.querySelectorAll('.campo-formulario input, .campo-formulario select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.querySelector('label').style.color = '#2ecc71';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.querySelector('label').style.color = '#2c3e50';
+            });
+        });
+    </script>
+</body>
+</html>

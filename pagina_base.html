@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Principal - Administrador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* --- VARIABLES DE COLOR --- */
+        :root {
+            --color-verde: #2ecc71;
+            --color-verde-hover: #27ae60;
+            --color-azul: #3498db;
+            --color-azul-hover: #2980b9;
+            --color-amarillo: #f1c40f;
+            --color-amarillo-hover: #f39c12;
+            --color-rojo: #e74c3c;
+            --color-rojo-hover: #c0392b;
+            --color-texto-blanco: #ffffff;
+            --color-texto-negro: #2c3e50;
+            --color-sombra: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --color-sombra-hover: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('imagen3.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(52, 152, 219, 0.2) 100%);
+            z-index: -1;
+        }
+
+        /* --- ENCABEZADO --- */
+        .encabezado {
+            background: linear-gradient(135deg, var(--color-verde) 0%, var(--color-azul) 100%);
+            color: var(--color-texto-blanco);
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: var(--color-sombra);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .encabezado::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="rgba(255,255,255,0.05)" points="0,100 100,0 100,100"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        .titulo-bienvenida {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .titulo-bienvenida::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--color-texto-blanco);
+            border-radius: 2px;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .contenedor-principal {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* --- BOTONES PRINCIPALES --- */
+        .contenedor-botones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+            max-width: 1000px;
+            width: 90%;
+        }
+
+        .boton-principal {
+            min-width: 280px;
+            height: 120px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: var(--color-texto-blanco);
+            box-shadow: var(--color-sombra);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            padding: 0 20px;
+        }
+
+        .boton-principal i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .boton-principal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.2) 50%, transparent 75%);
+            background-size: 400% 400%;
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .boton-principal:hover::before {
+            opacity: 1;
+            animation: shine 2.5s infinite;
+        }
+
+        @keyframes shine {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .boton-principal:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: var(--color-sombra-hover);
+        }
+
+        .boton-principal:hover i {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .boton-principal:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .boton-registrar {
+            background: linear-gradient(135deg, var(--color-verde), #1abc9c);
+        }
+
+        .boton-registrar:hover {
+            background: linear-gradient(135deg, var(--color-verde-hover), #16a085);
+        }
+
+        .boton-visualizar {
+            background: linear-gradient(135deg, var(--color-azul), #3498db);
+        }
+
+        .boton-visualizar:hover {
+            background: linear-gradient(135deg, var(--color-azul-hover), #2980b9);
+        }
+
+        .boton-guardia {
+            background: linear-gradient(135deg, var(--color-amarillo), #f39c12);
+            color: var(--color-texto-negro);
+        }
+
+        .boton-guardia:hover {
+            background: linear-gradient(135deg, var(--color-amarillo-hover), #e67e22);
+        }
+
+        /* --- BOTÓN SALIR --- */
+        .contenedor-boton-salir {
+            margin: 50px 0 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .boton-salir {
+            width: 220px;
+            height: 80px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--color-rojo), #e74c3c);
+            color: var(--color-texto-blanco);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: var(--color-sombra);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .boton-salir i {
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .boton-salir:hover {
+            background: linear-gradient(135deg, var(--color-rojo-hover), #c0392b);
+            transform: translateY(-5px) rotate(-2deg);
+            box-shadow: var(--color-sombra-hover);
+        }
+
+        .boton-salir:hover i {
+            transform: rotate(90deg);
+        }
+
+        .boton-salir:active {
+            transform: translateY(0) rotate(0);
+        }
+
+        /* --- PIE DE PÁGINA --- */
+        .pie-pagina {
+            background: linear-gradient(135deg, var(--color-rojo), #e74c3c);
+            color: var(--color-texto-blanco);
+            padding: 25px 0;
+            text-align: center;
+            font-size: 1rem;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+            clip-path: polygon(0 15%, 100% 0, 100% 100%, 0% 100%);
+            position: relative;
+        }
+
+        .pie-pagina::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="rgba(255,255,255,0.1)" points="0,0 100,100 0,100"/></svg>');
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        /* --- ANIMACIONES --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .contenedor-botones {
+                grid-template-columns: 1fr;
+                width: 80%;
+            }
+            
+            .boton-principal {
+                width: 100%;
+            }
+
+            .titulo-bienvenida {
+                font-size: 1.8rem;
+            }
+
+            .encabezado {
+                clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+                padding: 30px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .titulo-bienvenida {
+                font-size: 1.5rem;
+            }
+
+            .boton-principal {
+                height: 100px;
+                font-size: 1rem;
+            }
+
+            .boton-principal i {
+                font-size: 1.5rem;
+            }
+
+            .boton-salir {
+                width: 180px;
+                height: 70px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="encabezado animate__animated animate__fadeInDown">
+        <h1 class="titulo-bienvenida" id="titulo-bienvenida">Bienvenido al registro del estacionamiento TESI</h1>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="contenedor-principal">
+        <!-- Botones principales -->
+        <div class="contenedor-botones">
+            <a href="registro_usuario.html" class="boton-principal boton-registrar animate__animated animate__fadeInLeft" id="btn-registrar-usuario">
+                <i class="fas fa-user-plus"></i>
+                Registrar Usuario
+            </a>
+            <a href="visualizacion_usuarios.html" class="boton-principal boton-visualizar animate__animated animate__fadeInUp" id="btn-visualizar-usuarios">
+                <i class="fas fa-users-cog"></i>
+                Ver y Editar Usuarios
+            </a>
+            <a href="registro_guardia.html" class="boton-principal boton-guardia animate__animated animate__fadeInRight" id="btn-registrar-guardia">
+                <i class="fas fa-user-shield"></i>
+                Registrar Guardia
+            </a>
+        </div>
+
+        <!-- Botón Salir -->
+        <div class="contenedor-boton-salir">
+            <button class="boton-salir animate__animated animate__fadeInUp" id="btn-salir">
+                <i class="fas fa-sign-out-alt"></i>
+                SALIR
+            </button>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="pie-pagina animate__animated animate__fadeInUp">
+        <p>Sistema de Control de Estacionamiento</p>
+    </footer>
+
+    <script>
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const nombreUsuario = urlParams.get('usuario') || 'Usuario';
+        const idUsuario = urlParams.get('id') || '1';
+
+        // Actualizar título de bienvenida
+        document.getElementById('titulo-bienvenida').textContent = 
+            `Bienvenido "${nombreUsuario}", al registro del estacionamiento TESI`;
+
+        // Añadir parámetros a los enlaces
+        document.getElementById('btn-registrar-usuario').href = 
+            `registro_usuario.html?usuario=${encodeURIComponent(nombreUsuario)}&id=${idUsuario}`;
+        document.getElementById('btn-visualizar-usuarios').href = 
+            `visualizacion_usuarios.html?usuario=${encodeURIComponent(nombreUsuario)}&id=${idUsuario}`;
+        document.getElementById('btn-registrar-guardia').href = 
+            `registro_guardia.html?usuario=${encodeURIComponent(nombreUsuario)}&id=${idUsuario}`;
+
+        // Manejar evento del botón salir
+        document.getElementById('btn-salir').addEventListener('click', function() {
+            window.location.href = `menu_principal.html?usuario=${encodeURIComponent(nombreUsuario)}&id=${idUsuario}`;
+        });
+    </script>
+</body>
+</html>

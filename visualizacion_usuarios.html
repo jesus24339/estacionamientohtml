@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualización de Usuarios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        /* --- VARIABLES DE COLOR --- */
+        :root {
+            --color-verde: #2ecc71;
+            --color-verde-hover: #27ae60;
+            --color-azul: #3498db;
+            --color-azul-hover: #2980b9;
+            --color-rojo: #e74c3c;
+            --color-rojo-hover: #c0392b;
+            --color-amarillo: #f1c40f;
+            --color-amarillo-hover: #f39c12;
+            --color-texto-blanco: #ffffff;
+            --color-texto-negro: #2c3e50;
+            --color-fondo: rgba(255, 255, 255, 0.95);
+            --color-borde: rgba(0, 0, 0, 0.1);
+            --color-sombra: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --color-sombra-hover: 0 15px 35px rgba(0, 0, 0, 0.3);
+            --color-degradado: linear-gradient(135deg, #3498db, #2ecc71);
+            --color-tabla-fondo: rgba(255, 255, 255, 0.9);
+            --color-tabla-cabecera: #3498db;
+            --color-fila-seleccionada: rgba(52, 152, 219, 0.3);
+        }
+
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: url('imagen4.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(52, 152, 219, 0.2) 100%);
+            z-index: -1;
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .contenedor-principal {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--color-fondo);
+            border-radius: 20px;
+            box-shadow: var(--color-sombra);
+            padding: 40px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ENCABEZADO --- */
+        .encabezado {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .titulo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--color-texto-negro);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .titulo:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: var(--color-degradado);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- BOTONES DE SELECCIÓN --- */
+        .botones-seleccion {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .btn-seleccion {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: white;
+            width: 200px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--color-sombra);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-seleccion i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .btn-seleccion:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--color-sombra-hover);
+        }
+
+        .btn-usuarios {
+            background: linear-gradient(135deg, var(--color-verde), #1abc9c);
+        }
+
+        .btn-usuarios:hover {
+            background: linear-gradient(135deg, var(--color-verde-hover), #16a085);
+        }
+
+        .btn-guardias {
+            background: linear-gradient(135deg, var(--color-rojo), #e67e22);
+        }
+
+        .btn-guardias:hover {
+            background: linear-gradient(135deg, var(--color-rojo-hover), #d35400);
+        }
+
+        /* --- CONTENIDO --- */
+        .contenido {
+            background-color: var(--color-tabla-fondo);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contenido::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--color-degradado);
+        }
+
+        /* --- FILTROS --- */
+        .filtros {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+            background: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .filtros label {
+            font-size: 0.9rem;
+            margin-right: 5px;
+            font-weight: 500;
+            color: var(--color-texto-negro);
+        }
+
+        .filtros input {
+            padding: 10px 15px;
+            border: 1px solid var(--color-borde);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--color-texto-negro);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .filtros input:focus {
+            border-color: var(--color-azul);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .btn-filtrar, .btn-limpiar {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-filtrar i, .btn-limpiar i {
+            margin-right: 8px;
+        }
+
+        .btn-filtrar {
+            background: linear-gradient(135deg, var(--color-verde), #1abc9c);
+        }
+
+        .btn-filtrar:hover {
+            background: linear-gradient(135deg, var(--color-verde-hover), #16a085);
+            transform: translateY(-2px);
+        }
+
+        .btn-limpiar {
+            background: linear-gradient(135deg, var(--color-rojo), #e67e22);
+        }
+
+        .btn-limpiar:hover {
+            background: linear-gradient(135deg, var(--color-rojo-hover), #d35400);
+            transform: translateY(-2px);
+        }
+
+        .tabla-container {
+            overflow-x: auto;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--color-tabla-fondo);
+            table-layout: fixed; /* Añadido para forzar el ancho de columnas */
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-borde);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Ajustes específicos para la tabla de guardias */
+        #tabla-guardias th:nth-child(1),
+        #tabla-guardias td:nth-child(1) {
+            width: 5%; /* ID */
+        }
+        
+        #tabla-guardias th:nth-child(2),
+        #tabla-guardias td:nth-child(2) {
+            width: 20%; /* Nombre */
+        }
+        
+        #tabla-guardias th:nth-child(3),
+        #tabla-guardias td:nth-child(3) {
+            width: 15%; /* Apellido Paterno */
+        }
+        
+        #tabla-guardias th:nth-child(4),
+        #tabla-guardias td:nth-child(4) {
+            width: 15%; /* Apellido Materno */
+        }
+        
+        #tabla-guardias th:nth-child(5),
+        #tabla-guardias td:nth-child(5) {
+            width: 15%; /* Matrícula */
+        }
+        
+        #tabla-guardias th:nth-child(6),
+        #tabla-guardias td:nth-child(6) {
+            width: 15%; /* Turno */
+        }
+        
+        #tabla-guardias th:nth-child(7),
+        #tabla-guardias td:nth-child(7) {
+            width: 15%; /* Contraseña */
+        }
+
+
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        /* Nueva clase para fila seleccionada */
+        tr.selected {
+            background-color: var(--color-fila-seleccionada) !important;
+            font-weight: 500;
+        }
+
+        /* --- BOTONES DE ACCIÓN --- */
+        .botones-accion {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+        }
+
+        .btn-accion {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-accion i {
+            margin-right: 8px;
+        }
+
+        .btn-accion:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-editar {
+            background: linear-gradient(135deg, var(--color-azul), #1abc9c);
+        }
+
+        .btn-editar:hover {
+            background: linear-gradient(135deg, var(--color-azul-hover), #16a085);
+        }
+
+        .btn-eliminar {
+            background: linear-gradient(135deg, var(--color-rojo), #e67e22);
+        }
+
+        .btn-eliminar:hover {
+            background: linear-gradient(135deg, var(--color-rojo-hover), #d35400);
+        }
+
+        /* --- BOTÓN REGRESAR --- */
+        .btn-regresar {
+            display: block;
+            margin: 30px auto 0;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 200px;
+            height: 50px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            box-shadow: var(--color-sombra);
+            background: linear-gradient(135deg, var(--color-azul), #9b59b6);
+        }
+
+        .btn-regresar i {
+            margin-right: 10px;
+        }
+
+        .btn-regresar:hover {
+            background: linear-gradient(135deg, var(--color-azul-hover), #8e44ad);
+            transform: translateY(-5px);
+            box-shadow: var(--color-sombra-hover);
+        }
+
+        /* --- MODAL DE EDICIÓN --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-contenido {
+            background-color: var(--color-fondo);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-contenido::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--color-degradado);
+        }
+
+        .modal-titulo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--color-texto-negro);
+            text-align: center;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .modal-titulo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--color-azul);
+            border-radius: 3px;
+        }
+
+        .modal-formulario {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .modal-campo {
+            margin-bottom: 15px;
+        }
+
+        .modal-campo label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-texto-negro);
+        }
+
+        .modal-campo input,
+        .modal-campo select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--color-borde);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--color-texto-negro);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-campo input:focus,
+        .modal-campo select:focus {
+            border-color: var(--color-azul);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .modal-campo select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+
+        .modal-botones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            grid-column: 1 / -1;
+            gap: 20px;
+        }
+
+        .btn-modal {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-modal i {
+            margin-right: 10px;
+        }
+
+        .btn-modal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-guardar {
+            background: linear-gradient(135deg, var(--color-verde), #1abc9c);
+        }
+
+        .btn-guardar:hover {
+            background: linear-gradient(135deg, var(--color-verde-hover), #16a085);
+        }
+
+        .btn-cancelar {
+            background: linear-gradient(135deg, var(--color-rojo), #e67e22);
+        }
+
+        .btn-cancelar:hover {
+            background: linear-gradient(135deg, var(--color-rojo-hover), #d35400);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .modal-formulario {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contenedor-principal {
+                padding: 25px;
+            }
+            
+            .botones-seleccion {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .filtros {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-filtrar, .btn-limpiar {
+                width: 100%;
+            }
+            
+            .modal-contenido {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contenedor-principal {
+                padding: 20px;
+            }
+            
+            .titulo {
+                font-size: 1.8rem;
+            }
+            
+            .botones-accion {
+                flex-direction: column;
+            }
+            
+            .btn-accion {
+                width: 100%;
+            }
+        }
+
+        /* --- ANIMACIONES --- */
+        .animate__delay-1s {
+            animation-delay: 0.1s;
+        }
+
+        .animate__delay-2s {
+            animation-delay: 0.2s;
+        }
+
+        .animate__delay-3s {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-principal animate__animated animate__fadeIn">
+        <!-- Encabezado -->
+        <div class="encabezado">
+            <h1 class="titulo animate__animated animate__fadeInDown" id="titulo-visualizacion">Visualización de Usuarios</h1>
+        </div>
+
+        <!-- Botones de selección -->
+        <div class="botones-seleccion animate__animated animate__fadeIn animate__delay-1s">
+            <button class="btn-seleccion btn-usuarios" id="btn-usuarios"><i class="fas fa-users"></i> USUARIOS</button>
+            <button class="btn-seleccion btn-guardias" id="btn-guardias"><i class="fas fa-shield-alt"></i> GUARDIAS</button>
+        </div>
+
+        <!-- Contenido dinámico -->
+        <div class="contenido animate__animated animate__fadeIn animate__delay-2s" id="contenido-dinamico">
+            <!-- Aquí se cargará el contenido de usuarios o guardias -->
+        </div>
+
+        <!-- Botón regresar -->
+        <a href="#" class="btn-regresar animate__animated animate__fadeIn animate__delay-3s" id="btn-regresar"><i class="fas fa-arrow-left"></i> REGRESAR</a>
+    </div>
+
+    <!-- Modal de edición -->
+    <div id="modal-edicion" class="modal">
+        <div class="modal-contenido">
+            <h2 class="modal-titulo" id="modal-titulo">Editar Registro</h2>
+            <form id="formulario-edicion" class="modal-formulario">
+                <!-- Los campos se generarán dinámicamente -->
+            </form>
+            <div class="modal-botones">
+                <button type="button" class="btn-modal btn-guardar" id="btn-guardar-cambios"><i class="fas fa-save"></i> GUARDAR CAMBIOS</button>
+                <button type="button" class="btn-modal btn-cancelar" id="btn-cancelar-edicion"><i class="fas fa-times"></i> CANCELAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Variables globales
+        let tablaActual = null;
+        let tipoActual = 'usuarios';
+        let datosActuales = [];
+        let modalAbierto = false;
+        let registroEditando = null;
+        let filaSeleccionada = null;
+
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const adminNombre = urlParams.get('usuario') || 'Administrador';
+        const adminId = urlParams.get('id') || '1';
+
+        // Actualizar título
+        document.getElementById('titulo-visualizacion').textContent = 
+            `Visualización de Usuarios - ${adminNombre}`;
+
+        // Configurar redirección del botón regresar
+        document.getElementById('btn-regresar').href = 
+            `pagina_base.html?usuario=${encodeURIComponent(adminNombre)}&id=${adminId}`;
+
+        // Event listeners
+        document.getElementById('btn-usuarios').addEventListener('click', () => cargarUsuarios());
+        document.getElementById('btn-guardias').addEventListener('click', () => cargarGuardias());
+        document.getElementById('btn-cancelar-edicion').addEventListener('click', cerrarModal);
+        document.getElementById('btn-guardar-cambios').addEventListener('click', guardarCambios);
+
+        // Cargar usuarios por defecto
+        cargarUsuarios();
+
+        // Función para cargar usuarios
+        function cargarUsuarios() {
+            tipoActual = 'usuarios';
+            document.getElementById('contenido-dinamico').innerHTML = `
+                <div class="filtros">
+                    <label>Filtrar por:</label>
+                    <label>Matrícula:</label>
+                    <input type="text" id="filtro-matricula" placeholder="Matrícula">
+                    <label>Apellido Paterno:</label>
+                    <input type="text" id="filtro-apellido-p" placeholder="Apellido Paterno">
+                    <label>Apellido Materno:</label>
+                    <input type="text" id="filtro-apellido-m" placeholder="Apellido Materno">
+                    <label>Nombre:</label>
+                    <input type="text" id="filtro-nombre" placeholder="Nombre">
+                    <button class="btn-filtrar" id="btn-filtrar-usuarios"><i class="fas fa-filter"></i> Filtrar</button>
+                    <button class="btn-limpiar" id="btn-limpiar-usuarios"><i class="fas fa-broom"></i> Limpiar</button>
+                </div>
+                <div class="tabla-container">
+                    <table id="tabla-usuarios" class="display">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Matrícula</th>
+                                <th>Vehículo</th>
+                                <th>Placa</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Color</th>
+                                <th>Año</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo-tabla-usuarios">
+                            <!-- Datos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="botones-accion">
+                    <button class="btn-accion btn-editar" id="btn-editar-usuario"><i class="fas fa-edit"></i> Editar Seleccionado</button>
+                    <button class="btn-accion btn-eliminar" id="btn-eliminar-usuario"><i class="fas fa-trash-alt"></i> Eliminar Seleccionado</button>
+                </div>
+            `;
+
+            // Configurar eventos de los nuevos elementos
+            document.getElementById('btn-filtrar-usuarios').addEventListener('click', aplicarFiltrosUsuarios);
+            document.getElementById('btn-limpiar-usuarios').addEventListener('click', limpiarFiltrosUsuarios);
+            document.getElementById('btn-editar-usuario').addEventListener('click', editarRegistro);
+            document.getElementById('btn-eliminar-usuario').addEventListener('click', eliminarRegistro);
+
+            // Cargar datos de usuarios
+            fetch('obtener_usuarios.php')
+                .then(response => response.json())
+                .then(data => {
+                    datosActuales = data;
+                    inicializarTablaUsuarios(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar los usuarios',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
+        }
+
+        // Función para cargar guardias
+        function cargarGuardias() {
+            tipoActual = 'guardias';
+            document.getElementById('contenido-dinamico').innerHTML = `
+                <div class="filtros">
+                    <label>Filtrar por:</label>
+                    <label>Matrícula:</label>
+                    <input type="text" id="filtro-matricula" placeholder="Matrícula">
+                    <label>Apellido Paterno:</label>
+                    <input type="text" id="filtro-apellido-p" placeholder="Apellido Paterno">
+                    <label>Apellido Materno:</label>
+                    <input type="text" id="filtro-apellido-m" placeholder="Apellido Materno">
+                    <label>Nombre:</label>
+                    <input type="text" id="filtro-nombre" placeholder="Nombre">
+                    <button class="btn-filtrar" id="btn-filtrar-guardias"><i class="fas fa-filter"></i> Filtrar</button>
+                    <button class="btn-limpiar" id="btn-limpiar-guardias"><i class="fas fa-broom"></i> Limpiar</button>
+                </div>
+                <div class="tabla-container">
+                    <table id="tabla-guardias" class="display">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido Paterno</th>
+                                <th>Apellido Materno</th>
+                                <th>Matrícula</th>
+                                <th>Turno</th>
+                                <th>Contraseña</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo-tabla-guardias">
+                            <!-- Datos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="botones-accion">
+                    <button class="btn-accion btn-editar" id="btn-editar-guardia"><i class="fas fa-edit"></i> Editar Seleccionado</button>
+                    <button class="btn-accion btn-eliminar" id="btn-eliminar-guardia"><i class="fas fa-trash-alt"></i> Eliminar Seleccionado</button>
+                </div>
+            `;
+
+            // Configurar eventos de los nuevos elementos
+            document.getElementById('btn-filtrar-guardias').addEventListener('click', aplicarFiltrosGuardias);
+            document.getElementById('btn-limpiar-guardias').addEventListener('click', limpiarFiltrosGuardias);
+            document.getElementById('btn-editar-guardia').addEventListener('click', editarRegistro);
+            document.getElementById('btn-eliminar-guardia').addEventListener('click', eliminarRegistro);
+
+            // Cargar datos de guardias
+            fetch('obtener_guardias.php')
+                .then(response => response.json())
+                .then(data => {
+                    datosActuales = data;
+                    inicializarTablaGuardias(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudieron cargar los guardias',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
+        }
+
+        // Función para inicializar la tabla de usuarios
+        function inicializarTablaUsuarios(data) {
+            if (tablaActual) {
+                tablaActual.destroy();
+            }
+
+            const tabla = $('#tabla-usuarios').DataTable({
+                data: data,
+                columns: [
+                    { data: 'id' },
+                    { data: 'tipo' },
+                    { data: 'nombre' },
+                    { data: 'apellido_paterno' },
+                    { data: 'apellido_materno' },
+                    { data: 'matricula' },
+                    { data: 'vehiculo' },
+                    { data: 'placa' },
+                    { data: 'marca' },
+                    { data: 'modelo' },
+                    { data: 'color' },
+                    { data: 'anio' }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+                },
+                scrollX: true,
+                select: {
+                    style: 'single'
+                }
+            });
+
+            // Configurar evento de selección de fila
+            $('#tabla-usuarios tbody').on('click', 'tr', function() {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                    filaSeleccionada = null;
+                } else {
+                    tabla.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    filaSeleccionada = tabla.row(this).data();
+                }
+            });
+
+            tablaActual = tabla;
+        }
+
+        // Función para inicializar la tabla de guardias
+        // Función para inicializar la tabla de guardias
+        function inicializarTablaGuardias(data) {
+            if (tablaActual) {
+                tablaActual.destroy();
+            }
+
+            const tabla = $('#tabla-guardias').DataTable({
+                data: data,
+                columns: [
+                    { data: 'id' },
+                    { data: 'nombre' },
+                    { data: 'apellido_paterno' },
+                    { data: 'apellido_materno' },
+                    { data: 'matricula' },
+                    { data: 'turno' },
+                    { 
+                        data: 'contrasena',
+                        render: function(data, type, row) {
+                            return type === 'display' ? '********' : data;
+                        }
+                    }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+                },
+                scrollX: true,
+                select: {
+                    style: 'single'
+                },
+                autoWidth: false, // Desactivar autoWidth para usar nuestros anchos definidos
+                columnDefs: [
+                    { width: '5%', targets: 0 },   // ID
+                    { width: '20%', targets: 1 },  // Nombre
+                    { width: '15%', targets: 2 },  // Apellido Paterno
+                    { width: '15%', targets: 3 },  // Apellido Materno
+                    { width: '15%', targets: 4 },  // Matrícula
+                    { width: '15%', targets: 5 },  // Turno
+                    { width: '15%', targets: 6 }   // Contraseña
+                ]
+            });
+
+            // Configurar evento de selección de fila
+            $('#tabla-guardias tbody').on('click', 'tr', function() {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                    filaSeleccionada = null;
+                } else {
+                    tabla.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    filaSeleccionada = tabla.row(this).data();
+                }
+            });
+
+            tablaActual = tabla;
+        }
+
+        // Función para aplicar filtros a usuarios
+        function aplicarFiltrosUsuarios() {
+            const matricula = document.getElementById('filtro-matricula').value;
+            const apellidoP = document.getElementById('filtro-apellido-p').value;
+            const apellidoM = document.getElementById('filtro-apellido-m').value;
+            const nombre = document.getElementById('filtro-nombre').value;
+
+            let resultados = datosActuales.filter(usuario => {
+                return (matricula === '' || usuario.matricula.includes(matricula)) &&
+                       (apellidoP === '' || usuario.apellido_paterno.includes(apellidoP)) &&
+                       (apellidoM === '' || usuario.apellido_materno.includes(apellidoM)) &&
+                       (nombre === '' || usuario.nombre.includes(nombre));
+            });
+
+            tablaActual.clear().rows.add(resultados).draw();
+        }
+
+        // Función para limpiar filtros de usuarios
+        function limpiarFiltrosUsuarios() {
+            document.getElementById('filtro-matricula').value = '';
+            document.getElementById('filtro-apellido-p').value = '';
+            document.getElementById('filtro-apellido-m').value = '';
+            document.getElementById('filtro-nombre').value = '';
+            tablaActual.clear().rows.add(datosActuales).draw();
+        }
+
+        // Función para aplicar filtros a guardias
+        function aplicarFiltrosGuardias() {
+            const matricula = document.getElementById('filtro-matricula').value;
+            const apellidoP = document.getElementById('filtro-apellido-p').value;
+            const apellidoM = document.getElementById('filtro-apellido-m').value;
+            const nombre = document.getElementById('filtro-nombre').value;
+
+            let resultados = datosActuales.filter(guardia => {
+                return (matricula === '' || guardia.matricula.includes(matricula)) &&
+                       (apellidoP === '' || guardia.apellido_paterno.includes(apellidoP)) &&
+                       (apellidoM === '' || guardia.apellido_materno.includes(apellidoM)) &&
+                       (nombre === '' || guardia.nombre.includes(nombre));
+            });
+
+            tablaActual.clear().rows.add(resultados).draw();
+        }
+
+        // Función para limpiar filtros de guardias
+        function limpiarFiltrosGuardias() {
+            document.getElementById('filtro-matricula').value = '';
+            document.getElementById('filtro-apellido-p').value = '';
+            document.getElementById('filtro-apellido-m').value = '';
+            document.getElementById('filtro-nombre').value = '';
+            tablaActual.clear().rows.add(datosActuales).draw();
+        }
+
+        // Función para editar registro
+        function editarRegistro() {
+            if (!filaSeleccionada) {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Por favor seleccione un registro para editar',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            registroEditando = filaSeleccionada;
+            abrirModalEdicion(filaSeleccionada);
+        }
+
+        // Función para abrir modal de edición
+        function abrirModalEdicion(datos) {
+            const modal = document.getElementById('modal-edicion');
+            const formulario = document.getElementById('formulario-edicion');
+            const titulo = document.getElementById('modal-titulo');
+            
+            // Limpiar formulario
+            formulario.innerHTML = '';
+            
+            // Configurar título
+            titulo.textContent = `Editando ${tipoActual === 'usuarios' ? 'Usuario' : 'Guardia'} ID: ${datos.id}`;
+            
+            // Generar campos dinámicamente
+            if (tipoActual === 'usuarios') {
+                // Campos para usuarios
+                const campos = [
+                    { label: 'Tipo', name: 'tipo', type: 'select', options: ['Estudiante', 'Docente'], value: datos.tipo },
+                    { label: 'Nombre', name: 'nombre', type: 'text', value: datos.nombre },
+                    { label: 'Apellido Paterno', name: 'apellido_paterno', type: 'text', value: datos.apellido_paterno },
+                    { label: 'Apellido Materno', name: 'apellido_materno', type: 'text', value: datos.apellido_materno },
+                    { label: 'Matrícula', name: 'matricula', type: 'text', value: datos.matricula },
+                    { label: 'Tipo de Vehículo', name: 'vehiculo', type: 'select', options: ['Automóvil', 'Motocicleta'], value: datos.vehiculo },
+                    { label: 'Placa', name: 'placa', type: 'text', value: datos.placa },
+                    { label: 'Marca', name: 'marca', type: 'text', value: datos.marca },
+                    { label: 'Modelo', name: 'modelo', type: 'text', value: datos.modelo },
+                    { label: 'Color', name: 'color', type: 'text', value: datos.color },
+                    { label: 'Año', name: 'anio', type: 'text', value: datos.anio }
+                ];
+                
+                campos.forEach(campo => {
+                    const div = document.createElement('div');
+                    div.className = 'modal-campo';
+                    
+                    const label = document.createElement('label');
+                    label.textContent = campo.label;
+                    label.htmlFor = campo.name;
+                    
+                    div.appendChild(label);
+                    
+                    if (campo.type === 'select') {
+                        const select = document.createElement('select');
+                        select.id = campo.name;
+                        select.name = campo.name;
+                        
+                        campo.options.forEach(opcion => {
+                            const option = document.createElement('option');
+                            option.value = opcion;
+                            option.textContent = opcion;
+                            if (opcion === campo.value) {
+                                option.selected = true;
+                            }
+                            select.appendChild(option);
+                        });
+                        
+                        div.appendChild(select);
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = campo.type;
+                        input.id = campo.name;
+                        input.name = campo.name;
+                        input.value = campo.value || '';
+                        
+                        div.appendChild(input);
+                    }
+                    
+                    formulario.appendChild(div);
+                });
+            } else {
+                // Campos para guardias
+                const campos = [
+                    { label: 'Nombre', name: 'nombre', type: 'text', value: datos.nombre },
+                    { label: 'Apellido Paterno', name: 'apellido_paterno', type: 'text', value: datos.apellido_paterno },
+                    { label: 'Apellido Materno', name: 'apellido_materno', type: 'text', value: datos.apellido_materno },
+                    { label: 'Matrícula', name: 'matricula', type: 'text', value: datos.matricula },
+                    { label: 'Turno', name: 'turno', type: 'select', options: ['Matutino', 'Vespertino'], value: datos.turno },
+                    { label: 'Contraseña', name: 'contrasena', type: 'password', value: datos.contrasena }
+                ];
+                
+                campos.forEach(campo => {
+                    const div = document.createElement('div');
+                    div.className = 'modal-campo';
+                    
+                    const label = document.createElement('label');
+                    label.textContent = campo.label;
+                    label.htmlFor = campo.name;
+                    
+                    div.appendChild(label);
+                    
+                    if (campo.type === 'select') {
+                        const select = document.createElement('select');
+                        select.id = campo.name;
+                        select.name = campo.name;
+                        
+                        campo.options.forEach(opcion => {
+                            const option = document.createElement('option');
+                            option.value = opcion;
+                            option.textContent = opcion;
+                            if (opcion === campo.value) {
+                                option.selected = true;
+                            }
+                            select.appendChild(option);
+                        });
+                        
+                        div.appendChild(select);
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = campo.type;
+                        input.id = campo.name;
+                        input.name = campo.name;
+                        input.value = campo.value || '';
+                        
+                        div.appendChild(input);
+                    }
+                    
+                    formulario.appendChild(div);
+                });
+            }
+            
+            // Mostrar modal
+            modal.style.display = 'block';
+            modalAbierto = true;
+        }
+
+        // Función para cerrar modal
+        function cerrarModal() {
+            const modal = document.getElementById('modal-edicion');
+            modal.style.display = 'none';
+            modalAbierto = false;
+            registroEditando = null;
+        }
+
+        // Función para guardar cambios
+        function guardarCambios() {
+            const formData = new FormData();
+            const inputs = document.querySelectorAll('#formulario-edicion input, #formulario-edicion select');
+            
+            inputs.forEach(input => {
+                formData.append(input.name, input.value);
+            });
+            
+            formData.append('id', registroEditando.id);
+            
+            const url = tipoActual === 'usuarios' ? 'actualizar_usuario.php' : 'actualizar_guardia.php';
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        cerrarModal();
+                        // Recargar datos
+                        if (tipoActual === 'usuarios') {
+                            cargarUsuarios();
+                        } else {
+                            cargarGuardias();
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al conectar con el servidor',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            });
+        }
+
+        // Función para eliminar registro
+        function eliminarRegistro() {
+            if (!filaSeleccionada) {
+                Swal.fire({
+                    title: 'Advertencia',
+                    text: 'Por favor seleccione un registro para eliminar',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            const datos = filaSeleccionada;
+            const tipo = tipoActual === 'usuarios' ? 'usuario' : 'guardia';
+            
+            Swal.fire({
+                title: 'Confirmar',
+                text: `¿Está seguro que desea eliminar al ${tipo} ${datos.nombre}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const url = tipoActual === 'usuarios' ? 'eliminar_usuario.php' : 'eliminar_guardia.php';
+                    const formData = new FormData();
+                    formData.append('id', datos.id);
+                    
+                    fetch(url, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Éxito',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonText: 'Aceptar'
+                            }).then(() => {
+                                // Recargar datos
+                                if (tipoActual === 'usuarios') {
+                                    cargarUsuarios();
+                                } else {
+                                    cargarGuardias();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Error al conectar con el servidor',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('modal-edicion');
+            if (event.target === modal && modalAbierto) {
+                cerrarModal();
+            }
+        });
+    </script>
+</body>
+</html>

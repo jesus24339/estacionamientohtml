@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro - Guardia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <style>
+        :root {
+            --color-fondo: rgba(255, 255, 255, 0.9);
+            --color-texto: #333;
+            --color-boton: #4CAF50;
+            --color-boton-hover: #45a049;
+            --color-boton-secundario: #f44336;
+            --color-boton-secundario-hover: #d32f2f;
+            --color-seccion: rgba(255, 255, 255, 0.95);
+            --color-boton-azul: #2196F3;
+            --color-boton-azul-hover: #0b7dda;
+            --color-boton-morado: #9c27b0;
+            --color-boton-morado-hover: #7b1fa2;
+            --color-boton-naranja: #ff9800;
+            --color-boton-naranja-hover: #e68a00;
+            --sombra: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --borde-redondeado: 8px;
+        }
+        
+        body {
+            background-image: url('imagen4.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--color-texto);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .contenedor-principal {
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: var(--borde-redondeado);
+            box-shadow: var(--sombra);
+            margin: 30px auto;
+            max-width: 95%;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .titulo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .subtitulo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        
+        .label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .btn-primario {
+            background-color: var(--color-boton);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra);
+        }
+        
+        .btn-primario:hover {
+            background-color: var(--color-boton-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secundario {
+            background-color: var(--color-boton-secundario);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra);
+        }
+        
+        .btn-secundario:hover {
+            background-color: var(--color-boton-secundario-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-azul {
+            background-color: var(--color-boton-azul);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra);
+        }
+        
+        .btn-azul:hover {
+            background-color: var(--color-boton-azul-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-morado {
+            background-color: var(--color-boton-morado);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra);
+        }
+        
+        .btn-morado:hover {
+            background-color: var(--color-boton-morado-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-naranja {
+            background-color: var(--color-boton-naranja);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: var(--sombra);
+        }
+        
+        .btn-naranja:hover {
+            background-color: var(--color-boton-naranja-hover);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .seccion {
+            background-color: var(--color-seccion);
+            border-radius: var(--borde-redondeado);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--sombra);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .hora-actual {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #2c3e50;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 15px;
+            border-radius: var(--borde-redondeado);
+            display: inline-block;
+            box-shadow: var(--sombra);
+        }
+        
+        .tabla-contenedor {
+            background-color: white;
+            color: #333;
+            border-radius: var(--borde-redondeado);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--sombra);
+            overflow: hidden;
+        }
+        
+        .form-control, .form-select {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: var(--borde-redondeado);
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: white;
+            border-color: var(--color-boton-azul);
+            box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+        }
+        
+        .modal-content {
+            background-color: var(--color-seccion);
+            color: var(--color-texto);
+            border-radius: var(--borde-redondeado);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: var(--borde-redondeado) var(--borde-redondeado) 0 0;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: rgba(52, 152, 219, 0.05);
+            border-radius: 0 0 var(--borde-redondeado) var(--borde-redondeado);
+        }
+        
+        .detalle-campo {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: background-color 0.2s ease;
+        }
+        
+        .detalle-campo:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+            border-radius: 4px;
+        }
+        
+        .detalle-label {
+            font-weight: bold;
+            margin-right: 15px;
+            width: 160px;
+            display: inline-block;
+            color: #3498db;
+        }
+        
+        .detalle-valor {
+            display: inline-block;
+        }
+        
+        .btn-group .btn {
+            margin: 0 8px;
+            border-radius: var(--borde-redondeado) !important;
+        }
+        
+        /* Mejoras para DataTables */
+        .dataTables_wrapper .dataTables_filter input {
+            border-radius: var(--borde-redondeado);
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-radius: var(--borde-redondeado) !important;
+            margin: 0 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #3498db !important;
+            color: white !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #3498db !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        /* Efecto de tarjeta para los elementos */
+        .card-effect {
+            transition: all 0.3s ease;
+            border-radius: var(--borde-redondeado);
+        }
+        
+        .card-effect:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Mejoras para el modal de confirmación */
+        #modal-confirmacion .modal-header {
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        #modal-confirmacion .modal-body {
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        /* Efecto de hover para las filas de la tabla */
+        table.dataTable tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        table.dataTable tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.1) !important;
+        }
+
+       .btn-danger {
+    background-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: var(--borde-redondeado);
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    box-shadow: var(--sombra);
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+#modal-confirmacion .btn-danger {
+    background-color: #dc3545;
+    margin-right: 10px;
+}
+
+#modal-confirmacion .btn-danger:hover {
+    background-color: #c82333;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Todo el contenido HTML se mantiene exactamente igual -->
+    <div class="container-fluid contenedor-principal">
+        <div class="row mb-4">
+            <div class="col text-center">
+                <div class="hora-actual" id="hora-actual"></div>
+                <h1 class="titulo">Sistema de Registro de Entrada/Salida - <span id="nombre-usuario">Guardia</span></h1>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col text-center">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-primario mx-2" id="btn-usuarios">USUARIOS</button>
+                    <button type="button" class="btn btn-secundario mx-2" id="btn-visitantes">VISITANTES</button>
+                    <button type="button" class="btn btn-azul mx-2" id="btn-descargar">DESCARGA DE REGISTRO</button>
+                    <button type="button" class="btn btn-morado mx-2" id="btn-historial">REVISAR HISTORIAL</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col" id="contenido-dinamico">
+                <!-- Contenido dinámico se cargará aquí -->
+                <?php include 'pagina_base_guardia_usuarios.php'; ?>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col">
+                <button type="button" class="btn btn-naranja" id="btn-terminar">TERMINAR DÍA</button>
+                <button type="button" class="btn btn-secundario float-end" id="btn-regresar">SALIR</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para detalles -->
+    <div class="modal fade" id="modal-detalles" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-detalles-titulo">Detalles</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-detalles-cuerpo">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secundario" id="btn-registrar-salida">REGISTRAR SALIDA</button>
+                    <button type="button" class="btn btn-primario" data-bs-dismiss="modal">CERRAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para confirmación -->
+    <div class="modal fade" id="modal-confirmacion" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modal-confirmacion-cuerpo">
+                    ¿Está seguro que desea realizar esta acción?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secundario" id="btn-confirmar-si">Sí</button>
+                    <button type="button" class="btn btn-primario" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Todo el JavaScript se mantiene exactamente igual -->
+    <script>
+        // Variables globales
+        let tipoSeleccionado = 'usuario';
+        let idSeleccionado = 0;
+        let modalDetalles = new bootstrap.Modal(document.getElementById('modal-detalles'));
+        let modalConfirmacion = new bootstrap.Modal(document.getElementById('modal-confirmacion'));
+        
+        // Actualizar hora cada segundo
+        function actualizarHora() {
+            const ahora = new Date();
+            const opciones = { 
+                timeZone: 'America/Mexico_City',
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            const fechaHora = ahora.toLocaleString('es-MX', opciones);
+            $('#hora-actual').text(`CDMX - ${fechaHora}`);
+        }
+        
+        setInterval(actualizarHora, 1000);
+        actualizarHora();
+        
+        // Obtener parámetros de la URL
+        function getParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                nombre: urlParams.get('nombre') || 'Guardia',
+                id: urlParams.get('id') || '1'
+            };
+        }
+        
+        // Cargar nombre de usuario
+        $(document).ready(function() {
+            const params = getParams();
+            $('#nombre-usuario').text(params.nombre);
+            
+            // Manejar clics en botones principales
+            $('#btn-usuarios').click(function() {
+                cargarContenido('usuarios');
+            });
+            
+            $('#btn-visitantes').click(function() {
+                cargarContenido('visitantes');
+            });
+            
+            $('#btn-descargar').click(function() {
+                cargarContenido('descargar');
+            });
+            
+            $('#btn-historial').click(function() {
+                cargarContenido('historial');
+            });
+            
+            $('#btn-terminar').click(function() {
+                terminarDia();
+            });
+            
+            $('#btn-regresar').click(function() {
+                window.location.href = 'menu_principal.html?' + window.location.search.substring(1);
+            });
+            
+            // Manejar clic en registrar salida
+            $('#btn-registrar-salida').click(function() {
+                registrarSalida();
+            });
+            
+            // Inicializar con usuarios
+            cargarContenido('usuarios');
+        });
+        
+        // Cargar contenido dinámico
+        function cargarContenido(tipo) {
+            let url = '';
+            
+            switch(tipo) {
+                case 'usuarios':
+                    url = 'pagina_base_guardia_usuarios.php';
+                    break;
+                case 'visitantes':
+                    url = 'pagina_base_guardia_visitantes.php';
+                    break;
+                case 'descargar':
+                    url = 'pagina_base_guardia_descargar.php';
+                    break;
+                case 'historial':
+                    url = 'pagina_base_guardia_historial.php';
+                    break;
+            }
+            
+            $.get(url + window.location.search, function(data) {
+                $('#contenido-dinamico').html(data);
+                
+                // Inicializar DataTables si existen
+                if ($.fn.DataTable.isDataTable('#tabla-usuarios')) {
+                    $('#tabla-usuarios').DataTable().destroy();
+                }
+                if ($.fn.DataTable.isDataTable('#tabla-visitantes')) {
+                    $('#tabla-visitantes').DataTable().destroy();
+                }
+                if ($.fn.DataTable.isDataTable('#tabla-historial-usuarios')) {
+                    $('#tabla-historial-usuarios').DataTable().destroy();
+                }
+                if ($.fn.DataTable.isDataTable('#tabla-historial-visitantes')) {
+                    $('#tabla-historial-visitantes').DataTable().destroy();
+                }
+                if ($.fn.DataTable.isDataTable('#tabla-pdf')) {
+                    $('#tabla-pdf').DataTable().destroy();
+                }
+                
+                $('table').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-MX.json'
+                    },
+                    scrollX: true
+                });
+            });
+        }
+        
+        // Registrar entrada de usuario
+        function registrarEntradaUsuario() {
+            const matricula = $('#matricula').val().trim();
+            
+            if (!matricula || matricula.length !== 9) {
+                alert('Por favor ingrese una matrícula válida de 9 dígitos');
+                return;
+            }
+            
+            $.post('registrar_entrada_usuario.php', { matricula: matricula }, function(response) {
+                if (response.success) {
+                    alert('Entrada registrada correctamente');
+                    $('#matricula').val('');
+                    cargarContenido('usuarios');
+                } else {
+                    alert(response.message || 'Error al registrar la entrada');
+                }
+            }, 'json').fail(function() {
+                alert('Error al comunicarse con el servidor');
+            });
+        }
+        
+        // Registrar entrada de visitante
+        function registrarEntradaVisitante() {
+            const datos = {
+                tipo: $('#tipo-visitante').val(),
+                nombre: $('#nombre-visitante').val().trim(),
+                apellido_p: $('#apellido-p-visitante').val().trim(),
+                vehiculo: $('#vehiculo-visitante').val(),
+                modelo: $('#modelo-visitante').val().trim(),
+                marca: $('#marca-visitante').val().trim(),
+                color: $('#color-visitante').val().trim(),
+                anio: $('#anio-visitante').val().trim(),
+                placa: $('#placa-visitante').val().trim()
+            };
+            
+            if (!datos.tipo || !datos.nombre || !datos.apellido_p || !datos.placa) {
+                alert('Por favor complete todos los campos obligatorios');
+                return;
+            }
+            
+            $.post('registrar_entrada_visitante.php', datos, function(response) {
+                if (response.success) {
+                    alert('Visitante registrado correctamente');
+                    limpiarCamposVisitante();
+                    cargarContenido('visitantes');
+                } else {
+                    alert(response.message || 'Error al registrar el visitante');
+                }
+            }, 'json').fail(function() {
+                alert('Error al comunicarse con el servidor');
+            });
+        }
+        
+        // Limpiar campos de visitante
+        function limpiarCamposVisitante() {
+            $('#tipo-visitante').val('');
+            $('#nombre-visitante').val('');
+            $('#apellido-p-visitante').val('');
+            $('#vehiculo-visitante').val('');
+            $('#modelo-visitante').val('');
+            $('#marca-visitante').val('');
+            $('#color-visitante').val('');
+            $('#anio-visitante').val('');
+            $('#placa-visitante').val('');
+        }
+        
+        // Filtrar usuarios
+        function filtrarUsuarios() {
+            const filtros = {
+                matricula: $('#filtro-matricula').val().trim(),
+                apellido_p: $('#filtro-apellido-p').val().trim(),
+                apellido_m: $('#filtro-apellido-m').val().trim(),
+                nombre: $('#filtro-nombre').val().trim()
+            };
+            
+            $.post('filtrar_usuarios.php', filtros, function(data) {
+                // Actualizar la tabla con los resultados
+                const tabla = $('#tabla-usuarios').DataTable();
+                tabla.clear().draw();
+                
+                data.forEach(usuario => {
+                    tabla.row.add([
+                        usuario.id,
+                        usuario.tipo,
+                        usuario.nombre,
+                        usuario.apellido_paterno,
+                        usuario.apellido_materno,
+                        usuario.matricula,
+                        usuario.vehiculo,
+                        usuario.placa,
+                        usuario.marca,
+                        usuario.modelo,
+                        usuario.color,
+                        usuario.anio
+                    ]).draw(false);
+                });
+            }, 'json').fail(function() {
+                alert('Error al aplicar filtros');
+            });
+        }
+        
+        // Filtrar visitantes
+        function filtrarVisitantes() {
+            const filtros = {
+                placa: $('#filtro-placa').val().trim(),
+                apellido_p: $('#filtro-apellido-p').val().trim(),
+                nombre: $('#filtro-nombre').val().trim()
+            };
+            
+            $.post('filtrar_visitantes.php', filtros, function(data) {
+                // Actualizar la tabla con los resultados
+                const tabla = $('#tabla-visitantes').DataTable();
+                tabla.clear().draw();
+                
+                data.forEach(visitante => {
+                    tabla.row.add([
+                        visitante.id,
+                        visitante.tipo,
+                        visitante.nombre,
+                        visitante.apellido_paterno,
+                        visitante.vehiculo,
+                        visitante.modelo,
+                        visitante.marca,
+                        visitante.color,
+                        visitante.anio,
+                        visitante.placa
+                    ]).draw(false);
+                });
+            }, 'json').fail(function() {
+                alert('Error al aplicar filtros');
+            });
+        }
+        
+        // Filtrar historial
+        function filtrarHistorial() {
+            const filtros = {
+                dia: $('#filtro-dia').val().trim(),
+                mes: $('#filtro-mes').val().trim(),
+                anio: $('#filtro-anio').val().trim()
+            };
+            
+            $.post('filtrar_historial.php', filtros, function(data) {
+                // Actualizar tablas con los resultados
+                const tablaUsuarios = $('#tabla-historial-usuarios').DataTable();
+                const tablaVisitantes = $('#tabla-historial-visitantes').DataTable();
+                
+                tablaUsuarios.clear().draw();
+                tablaVisitantes.clear().draw();
+                
+                data.usuarios.forEach(usuario => {
+                    tablaUsuarios.row.add([
+                        usuario.id,
+                        usuario.tipo,
+                        usuario.nombre,
+                        usuario.apellido_paterno,
+                        usuario.apellido_materno,
+                        usuario.matricula,
+                        usuario.vehiculo,
+                        usuario.placa,
+                        usuario.hora_entrada,
+                        usuario.hora_salida
+                    ]).draw(false);
+                });
+                
+                data.visitantes.forEach(visitante => {
+                    tablaVisitantes.row.add([
+                        visitante.id,
+                        visitante.tipo,
+                        visitante.nombre,
+                        visitante.apellido_paterno,
+                        visitante.vehiculo,
+                        visitante.placa,
+                        visitante.hora_entrada,
+                        visitante.hora_salida
+                    ]).draw(false);
+                });
+            }, 'json').fail(function() {
+                alert('Error al aplicar filtros');
+            });
+        }
+        
+        // Mostrar detalles
+        function mostrarDetalles(tipo, id) {
+            tipoSeleccionado = tipo;
+            idSeleccionado = id;
+            
+            $.post('obtener_detalles.php', { tipo: tipo, id: id }, function(data) {
+                if (data.success) {
+                    let contenido = '<div class="container">';
+                    
+                    if (tipo === 'usuario') {
+                        $('#modal-detalles-titulo').text(`Detalles de Usuario ID: ${id}`);
+                        
+                        contenido += `
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Tipo:</span>
+                                <span class="detalle-valor">${data.datos.tipo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Nombre:</span>
+                                <span class="detalle-valor">${data.datos.nombre || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Apellido Paterno:</span>
+                                <span class="detalle-valor">${data.datos.apellido_paterno || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Apellido Materno:</span>
+                                <span class="detalle-valor">${data.datos.apellido_materno || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Matrícula:</span>
+                                <span class="detalle-valor">${data.datos.matricula || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Vehículo:</span>
+                                <span class="detalle-valor">${data.datos.vehiculo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Placa:</span>
+                                <span class="detalle-valor">${data.datos.placa || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Marca:</span>
+                                <span class="detalle-valor">${data.datos.marca || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Modelo:</span>
+                                <span class="detalle-valor">${data.datos.modelo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Color:</span>
+                                <span class="detalle-valor">${data.datos.color || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Año:</span>
+                                <span class="detalle-valor">${data.datos.anio || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Hora de Entrada:</span>
+                                <span class="detalle-valor">${data.datos.hora_entrada || 'No registrada'}</span>
+                            </div>
+                            ${data.datos.hora_salida ? `
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Hora de Salida:</span>
+                                <span class="detalle-valor">${data.datos.hora_salida}</span>
+                            </div>` : ''}
+                        `;
+                    } else {
+                        $('#modal-detalles-titulo').text(`Detalles de Visitante ID: ${id}`);
+                        
+                        contenido += `
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Tipo:</span>
+                                <span class="detalle-valor">${data.datos.tipo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Nombre:</span>
+                                <span class="detalle-valor">${data.datos.nombre || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Apellido Paterno:</span>
+                                <span class="detalle-valor">${data.datos.apellido_paterno || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Vehículo:</span>
+                                <span class="detalle-valor">${data.datos.vehiculo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Placa:</span>
+                                <span class="detalle-valor">${data.datos.placa || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Marca:</span>
+                                <span class="detalle-valor">${data.datos.marca || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Modelo:</span>
+                                <span class="detalle-valor">${data.datos.modelo || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Color:</span>
+                                <span class="detalle-valor">${data.datos.color || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Año:</span>
+                                <span class="detalle-valor">${data.datos.anio || 'N/A'}</span>
+                            </div>
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Hora de Entrada:</span>
+                                <span class="detalle-valor">${data.datos.hora_entrada || 'No registrada'}</span>
+                            </div>
+                            ${data.datos.hora_salida ? `
+                            <div class="row detalle-campo">
+                                <span class="detalle-label">Hora de Salida:</span>
+                                <span class="detalle-valor">${data.datos.hora_salida}</span>
+                            </div>` : ''}
+                        `;
+                    }
+                    
+                    contenido += '</div>';
+                    $('#modal-detalles-cuerpo').html(contenido);
+                    
+                    // Mostrar/ocultar botón de registrar salida según corresponda
+                    if (data.datos.hora_salida) {
+                        $('#btn-registrar-salida').hide();
+                    } else {
+                        $('#btn-registrar-salida').show();
+                    }
+                    
+                    modalDetalles.show();
+                } else {
+                    alert(data.message || 'Error al obtener detalles');
+                }
+            }, 'json').fail(function() {
+                alert('Error al comunicarse con el servidor');
+            });
+        }
+        
+        // Registrar salida
+        function registrarSalida() {
+            $.post('registrar_salida.php', { tipo: tipoSeleccionado, id: idSeleccionado }, function(response) {
+                if (response.success) {
+                    alert('Salida registrada correctamente');
+                    modalDetalles.hide();
+                    
+                    // Actualizar la vista actual
+                    if (tipoSeleccionado === 'usuario') {
+                        cargarContenido('usuarios');
+                    } else {
+                        cargarContenido('visitantes');
+                    }
+                } else {
+                    alert(response.message || 'Error al registrar la salida');
+                }
+            }, 'json').fail(function() {
+                alert('Error al comunicarse con el servidor');
+            });
+        }
+        
+        // Terminar día
+        function terminarDia() {
+            $('#modal-confirmacion-cuerpo').html('¿Está seguro que desea terminar el día?<br>Se generará un PDF con todos los registros.');
+            
+            modalConfirmacion.show();
+            
+            $('#btn-confirmar-si').off('click').on('click', function() {
+                modalConfirmacion.hide();
+                
+                $.post('terminar_dia.php', function(response) {
+                    if (response.success) {
+                        if (response.pdf_url) {
+                            // Descargar el PDF automáticamente
+                            const link = document.createElement('a');
+                            link.href = response.pdf_url;
+                            link.download = response.nombre_archivo;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            
+                            alert('Día terminado correctamente. Se ha generado el reporte.');
+                        } else {
+                            alert('Día terminado correctamente, pero no se pudo generar el PDF.');
+                        }
+                        
+                        // Actualizar las vistas
+                        cargarContenido('usuarios');
+                    } else {
+                        alert(response.message || 'Error al terminar el día');
+                    }
+                }, 'json').fail(function() {
+                    alert('Error al comunicarse con el servidor');
+                });
+            });
+        }
+        
+        // Visualizar PDF
+        function visualizarPDF(id) {
+            window.open(`visualizar_pdf.php?id=${id}`, '_blank');
+        }
+        
+        // Descargar PDF
+        function descargarPDF(id, nombre) {
+            const link = document.createElement('a');
+            link.href = `descargar_pdf.php?id=${id}`;
+            link.download = nombre;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+
+// Función para confirmar la eliminación del historial
+function confirmarEliminacionHistorial() {
+    const dia = $('#filtro-dia').val();
+    const mes = $('#filtro-mes').val();
+    const anio = $('#filtro-anio').val();
+    
+    if (!dia || !mes || !anio) {
+        alert('Por favor seleccione una fecha completa (día, mes y año)');
+        return;
+    }
+    
+    const fecha = `${dia}/${mes}/${anio}`;
+    $('#modal-confirmacion-cuerpo').html(`
+        ¿Está seguro que desea eliminar el historial del día ${fecha}?<br><br>
+        <strong>Esta acción es irreversible y borrará todos los registros de esa fecha.</strong>
+    `);
+    
+    modalConfirmacion.show();
+    
+    $('#btn-confirmar-si').off('click').on('click', function() {
+        eliminarHistorial(dia, mes, anio);
+        modalConfirmacion.hide();
+    });
+}
+
+// Confirmar eliminación de historial
+function confirmarEliminarHistorial() {
+    const dia = $('#filtro-dia').val().trim();
+    const mes = $('#filtro-mes').val().trim();
+    const anio = $('#filtro-anio').val().trim();
+    
+    if (!dia || !mes || !anio) {
+        alert('Por favor seleccione un día, mes y año para eliminar el historial');
+        return;
+    }
+    
+    const fechaSeleccionada = `${dia}/${mes}/${anio}`;
+    $('#modal-confirmacion-cuerpo').html(`
+        ¿Está seguro que desea eliminar permanentemente el historial del día ${fechaSeleccionada}?<br><br>
+        <strong>Esta acción es irreversible y eliminará todos los registros de ese día.</strong>
+    `);
+    
+    modalConfirmacion.show();
+    
+    $('#btn-confirmar-si').off('click').on('click', function() {
+        eliminarHistorial(dia, mes, anio);
+        modalConfirmacion.hide();
+    });
+}
+
+// Confirmar eliminación de historial
+function confirmarEliminarHistorial() {
+    const dia = $('#filtro-dia').val().trim();
+    const mes = $('#filtro-mes').val().trim();
+    const anio = $('#filtro-anio').val().trim();
+    
+    if (!dia || !mes || !anio) {
+        alert('Por favor seleccione un día, mes y año para eliminar el historial');
+        return;
+    }
+    
+    const fechaSeleccionada = `${dia}/${mes}/${anio}`;
+    $('#modal-confirmacion-cuerpo').html(`
+        ¿Está seguro que desea eliminar permanentemente el historial del día ${fechaSeleccionada}?<br><br>
+        <strong>Esta acción es irreversible y eliminará todos los registros de ese día.</strong>
+    `);
+    
+    modalConfirmacion.show();
+    
+    $('#btn-confirmar-si').off('click').on('click', function() {
+        eliminarHistorial(dia, mes, anio);
+        modalConfirmacion.hide();
+    });
+}
+
+// Eliminar historial del día seleccionado
+function eliminarHistorial(dia, mes, anio) {
+    $.post('eliminar_historial.php', { dia: dia, mes: mes, anio: anio }, function(response) {
+        if (response.success) {
+            alert('Historial eliminado correctamente');
+            filtrarHistorial(); // Actualizar la vista
+        } else {
+            alert(response.message || 'Error al eliminar el historial');
+        }
+    }, 'json').fail(function() {
+        alert('Error al comunicarse con el servidor');
+    });
+}
+
+// Confirmar eliminación de historial
+    function confirmarEliminarHistorial() {
+        const dia = $('#filtro-dia').val().trim();
+        const mes = $('#filtro-mes').val().trim();
+        const anio = $('#filtro-anio').val().trim();
+        
+        if (!dia || !mes || !anio) {
+            alert('Por favor seleccione un día, mes y año para eliminar el historial');
+            return;
+        }
+        
+        const fechaSeleccionada = `${dia}/${mes}/${anio}`;
+        $('#modal-confirmacion-cuerpo').html(`
+            ¿Está seguro que desea eliminar permanentemente el historial del día ${fechaSeleccionada}?<br><br>
+            <strong>Esta acción es irreversible y eliminará todos los registros de ese día.</strong>
+        `);
+        
+        modalConfirmacion.show();
+        
+        $('#btn-confirmar-si').off('click').on('click', function() {
+            eliminarHistorial(dia, mes, anio);
+            modalConfirmacion.hide();
+        });
+    }
+
+    // Eliminar historial del día seleccionado
+    function eliminarHistorial(dia, mes, anio) {
+        $.post('eliminar_historial.php', { dia: dia, mes: mes, anio: anio }, function(response) {
+            if (response.success) {
+                alert('Historial eliminado correctamente');
+                filtrarHistorial(); // Actualizar la vista
+            } else {
+                alert(response.message || 'Error al eliminar el historial');
+            }
+        }, 'json').fail(function() {
+            alert('Error al comunicarse con el servidor');
+        });
+    }
+    
+    </script>
+</body>
+</html>
